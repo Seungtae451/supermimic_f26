@@ -1,11 +1,15 @@
-# F26 live simulation
+# F26 browser simulation
 
-Each browser tab gets its own simulation session on Spark. Visitors can independently select checkpoints and motions, reset, seek, pause, change speed, and adjust controls without changing other sessions. Checkpoint refresh and latest loading affect only that session. Reloading or reconnecting starts a fresh session.
+https://seungtae451.github.io/supermimic_f26/
 
-Public site: https://seungtae451.github.io/supermimic_f26/
+Each browser runs the F26 policy, learned world model, and MuJoCo 3.16.0 in its own Web Worker. ONNX Runtime Web 1.31.1 uses single-threaded WASM; the renderer interpolates positions and quaternions and displays measured render FPS / simulation Hz. No per-frame server simulation or WebSocket stream is used by this version.
 
-The page embeds the Spark live simulator. Spark, the simulator container, and the Cloudflare tunnel must remain running. GPU simulation runs on Spark, not GitHub or visitors' machines. At most8 simultaneous physics sessions are admitted while training is running; additional connections retry when a session becomes free. Sessions are released when disconnected.
+Published checkpoint: **11600**. All40 LAFAN1 retargeted motions are available as lazy downloads. Motion/reset/seek/pause/speed/policy/noise/friction/perturb controls are local to each browser. This is live computation, not prerecorded playback. The checkpoint menu describes the exported build; new training snapshots need export before they can run in-browser. Reload published build reloads exported assets, not a live training checkpoint.
 
-The current Quick Tunnel is temporary. If it restarts, update both iframe source and direct link in index.html to the new public HTTPS URL. For a permanent backend hostname use a named tunnel/domain.
+Initial download is approximately100MB for models/runtimes/one motion, with versioned caching. Other motions download on selection. Assets currently come from the Spark HTTPS tunnel, so it must be online to load uncached files; once loaded, simulation runs in the visitor's browser. A tunnel restart changes its temporary hostname, requiring an index iframe/directlink update.
 
-GitHub Pages source: main / root. Only the static viewer page is published; training code and checkpoints are not uploaded.
+Original Cocelo coupling, torque clipping, action mapping and integration settings were preserved. Four native numerical fixtures and60-step/three-motion shipped-WASM core tests pass. ARM Node full step+three FK snapshots measured~5–6ms median; this is not a browser rendering FPS claim. Actual browser graphics performance depends on the visitor's device.
+
+The previous Spark-streamed implementation remains at [server viewer](server.html). It has8 concurrent GPU sessions; that limit does not apply to the browser-local simulation.
+
+This page embeds the static browser app; model exports are served by the running Spark asset server. Source backend training and raw checkpoints were not uploaded to this repository.
