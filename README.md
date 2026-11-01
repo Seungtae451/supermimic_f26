@@ -2,14 +2,18 @@
 
 https://seungtae451.github.io/supermimic_f26/
 
-Each browser runs the F26 policy, learned world model, and MuJoCo 3.16.0 in its own Web Worker. ONNX Runtime Web 1.31.1 uses single-threaded WASM; the renderer interpolates positions and quaternions and displays measured render FPS / simulation Hz. No per-frame server simulation or WebSocket stream is used by this version.
+Each browser runs the F26 policy, learned world model, and MuJoCo3.16.0 in its own WebWorker. ONNXRuntimeWeb1.31.1 uses single-threadedWASM; renderer interpolates poses and displays measuredrenderFPS/simulationHz. No per-frame server simulation or WebSocketstream is used.
 
-Published checkpoint: **11600**. All40 LAFAN1 retargeted motions are available as lazy downloads. Motion/reset/seek/pause/speed/policy/noise/friction/perturb controls are local to each browser. This is live computation, not prerecorded playback. The checkpoint menu describes the exported build; new training snapshots need export before they can run in-browser. Reload published build reloads exported assets, not a live training checkpoint.
+## Automatic checkpoint updates
 
-Initial download is approximately100MB for models/runtimes/one motion, with versioned caching. Other motions download on selection. Assets currently come from the Spark HTTPS tunnel, so it must be online to load uncached files; once loaded, simulation runs in the visitor's browser. A tunnel restart changes its temporary hostname, requiring an index iframe/directlink update.
+The Spark deployment service checks for completed numbered checkpoints every30seconds and publishes every10000trainingiterations (20000,30000,etc; current11600 is not downgraded to10000). CPU export, nativeONNXparity, all40motionhashchecks and shippedWASM/worker tests must pass before an atomic manifest switch. Failure keeps the previous published build and retriesafter5minutes. Training and PD settings are not changed; GPU is not requested by the deployment service.
 
-Original Cocelo coupling, torque clipping, action mapping and integration settings were preserved. Four native numerical fixtures and60-step/three-motion shipped-WASM core tests pass. ARM Node full step+three FK snapshots measured~5–6ms median; this is not a browser rendering FPS claim. Actual browser graphics performance depends on the visitor's device.
+The URL stays the same. Reload the page or use the published-build reload button to load a newly published version. A running browser does not swap models midway through a motion. The page header shows the actual loaded checkpoint. Export/verification can take additional time after a milestone. Numerical validation does not imply the policy has learned better balance.
 
-The previous Spark-streamed implementation remains at [server viewer](server.html). It has8 concurrent GPU sessions; that limit does not apply to the browser-local simulation.
+All40 LAFAN1retargeted motions load lazily. Motion/reset/seek/pause/speed/policy/noise/friction/perturb controls remain local to each browser. This is live computation, not prerecordedplayback.
 
-This page embeds the static browser app; model exports are served by the running Spark asset server. Source backend training and raw checkpoints were not uploaded to this repository.
+Initial download is approximately100MB, with versionedcaching; othermotions downloadonselection. SparkHTTPS tunnel serves staticassets and must stay online for uncacheddownloads. Once loaded, computation runs in the visitor's browser. A temporarytunnel restart changes hostname; update index iframe/directlink then.
+
+OriginalCocelo coupling,torqueclipping,actionmapping andintegration settings preserved. Native fixtures/actualWASMworker tests pass. ARMNode step+3FK~5–6ms median is not a browserFPSclaim; devicecapabilities determineactualspeed.
+
+Previous Sparkstreamed viewer: [server.html](server.html), limitedto8 concurrentGPUsessions. Thatlimit doesnotapply tobrowserlocalexecution. GitHub onlyembeds thestaticapp; rawtrainingcheckpoints/sourcebackendare not uploaded here.
