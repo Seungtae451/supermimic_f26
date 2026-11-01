@@ -1,15 +1,11 @@
 # F26 live simulation
 
-Read-only live viewer for the F26 humanoid. Camera orbit and zoom are available to visitors; checkpoint and simulation controls remain with the local Spark operator.
+Each browser tab gets its own simulation session on Spark. Visitors can independently select checkpoints and motions, reset, seek, pause, change speed, and adjust controls without changing other sessions. Checkpoint refresh and latest loading affect only that session. Reloading or reconnecting starts a fresh session.
 
-## Enable GitHub Pages once
+Public site: https://seungtae451.github.io/supermimic_f26/
 
-Open https://github.com/Seungtae451/supermimic_f26/settings/pages and choose **Deploy from a branch**, branch **main**, folder **/(root)**, then **Save**.
+The page embeds the Spark live simulator. Spark, the simulator container, and the Cloudflare tunnel must remain running. GPU simulation runs on Spark, not GitHub or visitors' machines. At most8 simultaneous physics sessions are admitted while training is running; additional connections retry when a session becomes free. Sessions are released when disconnected.
 
-Public site after deployment: https://seungtae451.github.io/supermimic_f26/
+The current Quick Tunnel is temporary. If it restarts, update both iframe source and direct link in index.html to the new public HTTPS URL. For a permanent backend hostname use a named tunnel/domain.
 
-## Live service
-
-This static page embeds the running Spark simulator. Spark, the simulator container, and the Cloudflare tunnel must remain running. It does not execute GPU simulation on GitHub and does not upload training checkpoints.
-
-The current Quick Tunnel is temporary. If it restarts, update both the iframe source and direct link in index.html to the new public HTTPS URL. A permanent backend hostname requires a named tunnel/domain.
+GitHub Pages source: main / root. Only the static viewer page is published; training code and checkpoints are not uploaded.
