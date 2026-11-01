@@ -6,7 +6,7 @@ Each browser runs the F26 policy, learned world model, and MuJoCo3.16.0 in its o
 
 ## Automatic checkpoint updates
 
-The Spark deployment service checks for completed numbered checkpoints every30seconds and publishes every10000trainingiterations (20000,30000,etc; current11600 is not downgraded to10000). CPU export, nativeONNXparity, all40motionhashchecks and shippedWASM/worker tests must pass before an atomic manifest switch. Failure keeps the previous published build and retriesafter5minutes. Training and PD settings are not changed; GPU is not requested by the deployment service.
+The Spark deployment service checks for completed numbered checkpoints every30seconds and publishes every 2,000 training iterations (12000, 14000, 16000, etc.; only versions newer than the currently published build are eligible). CPU export, nativeONNXparity, all40motionhashchecks and shippedWASM/worker tests must pass before an atomic manifest switch. Failure keeps the previous published build and retriesafter5minutes. Training and PD settings are not changed; GPU is not requested by the deployment service.
 
 The URL stays the same. Reload the page or use the published-build reload button to load a newly published version. A running browser does not swap models midway through a motion. The page header shows the actual loaded checkpoint. Export/verification can take additional time after a milestone. Numerical validation does not imply the policy has learned better balance.
 
